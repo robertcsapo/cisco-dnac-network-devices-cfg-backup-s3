@@ -1,0 +1,16 @@
+version: '3'
+services:
+  backend:
+    build: ./
+    image: robertcsapo/cisco-dnac-network-devices-cfg-backup-s3
+    environment:
+     - DNAC_HOST=dnac.example.tld
+     - DNAC_USER=user
+     - DNAC_PASS=password
+     - DNAC_SSL_VERIFY=False
+     - STORAGE=DO
+     - S3BUCKET=cisco-dnac-network-devices-cfg-backup-s3
+     - AWS_ACCESS_KEY=
+     - AWS_SECRET_KEY=
+     - ENDPOINT_URL=https://<URL-REGION-DO>/
+    network_mode: bridge
