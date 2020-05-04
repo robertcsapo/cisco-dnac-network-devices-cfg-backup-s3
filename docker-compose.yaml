@@ -1,0 +1,14 @@
+version: '3'
+services:
+  collector:
+    image: robertcsapo/cisco-dnac-network-devices-cfg-backup-s3
+    environment:
+     - DNAC_HOST=
+     - DNAC_USER=
+     - DNAC_PASS=
+     - DNAC_SSL_VERIFY=False
+     - STORAGE=AWS
+     - S3BUCKET=cisco-dnac-network-devices-cfg-backup-s3
+     - AWS_ACCESS_KEY=
+     - AWS_SECRET_KEY=
+    network_mode: bridge
