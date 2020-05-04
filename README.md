@@ -44,7 +44,6 @@ _(aws s3)_
 #### Docker Compose
 * Download or clone this repository
   - ```git clone https://github.com/robertcsapo/cisco-dnac-network-devices-cfg-backup-s3```
-  TODO
 
 * Setup
   - Edit the ```docker-compose.yaml``` for your personal settings.  
