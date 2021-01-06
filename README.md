@@ -1,15 +1,19 @@
 # cisco-dnac-network-devices-cfg-backup-s3
 
-**Disclaimer**  
-_This solution leverages currently unpublished Cisco DNA Center APIs (as of DATE)_  
-_Do not use in production_
-
 Download your Cisco Network Device Configuration from [Cisco DNA Center](https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html) (REST API).  
 Then store them on Object Storage ([S3 compatible](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services)), hosted in Public Cloud/Private Cloud/On-Prem  
 * Script downloads and stores (per device)
   * RUNNINGCONFIG
   * STARTUPCONFIG
+  * vlan.dat
 * _(Limited to Cisco IOS-XE Devices)_
+
+**version 1.1**
+- [x] Supported APIs for Cisco DNA Center version 2.1
+
+**version 1.0**
+- [x] Unsupported APIs for Cisco DNA Center version 1.3
+  - Do not use in production
 
 ### Why?
 * Store your configs, as long as you want
@@ -118,6 +122,7 @@ Use this settings if not using Environment or want to override
                           MinIO Inc. SECRET_KEY
                           MinIO Inc. Server ENDPOINT_URL
     --insecure            Disables SSL/TLS verification
+    --api API             Cisco DNA Center Platform Version (default: 2.1)
     --version             show program's version number and exit
 ```
   * Example

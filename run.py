@@ -28,7 +28,7 @@ or implied.
 
 __author__ = "Robert Csapo"
 __email__ = "rcsapo@cisco.com"
-__version__ = "1.0"
+__version__ = "1.1"
 __copyright__ = "Copyright (c) 2020 Cisco and/or its affiliates."
 __license__ = "Cisco Sample Code License, Version 1.1"
 __app__ = "cisco-dnac-network-devices-cfg-backup-s3"
@@ -36,74 +36,66 @@ __app__ = "cisco-dnac-network-devices-cfg-backup-s3"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description=__app__+" - help section\n\n"
+        description=__app__ + " - help section\n\n"
         "Using Environment (os.environ) overrides arguments below",
-        formatter_class=RawTextHelpFormatter)
+        formatter_class=RawTextHelpFormatter,
+    )
     parser.add_argument(
         "--dnac",
         nargs=3,
-        metavar=(
-            "DNAC_HOST",
-            "DNAC_USER",
-            "DNAC_PASS"),
+        metavar=("DNAC_HOST", "DNAC_USER", "DNAC_PASS"),
         help="Cisco DNA Center Hostname\nCisco DNA Center Username\n"
-        "Cisco DNA Center Password\nCisco DNA Center SSL Verify")
+        "Cisco DNA Center Password\nCisco DNA Center SSL Verify",
+    )
     parser.add_argument(
         "--aws",
         nargs=3,
-        metavar=(
-            "S3BUCKET",
-            "AWS_ACCESS_KEY",
-            "AWS_SECRET_KEY"),
+        metavar=("S3BUCKET", "AWS_ACCESS_KEY", "AWS_SECRET_KEY"),
         help="AWS S3 Bucket S3BUCKET Name\nAWS S3 AWS_ACCESS_KEY\n"
-        "AWS S3 AWS_SECRET_KEY")
+        "AWS S3 AWS_SECRET_KEY",
+    )
     parser.add_argument(
         "--gcp",
         nargs=3,
-        metavar=(
-            "S3BUCKET",
-            "AWS_ACCESS_KEY",
-            "AWS_SECRET_KEY"),
+        metavar=("S3BUCKET", "AWS_ACCESS_KEY", "AWS_SECRET_KEY"),
         help="Google Cloud Storage S3BUCKET Bucket Name\n"
-        "Google Cloud Storage ACCESS_KEY\nGoogle Cloud Storage SECRET_KEY")
+        "Google Cloud Storage ACCESS_KEY\nGoogle Cloud Storage SECRET_KEY",
+    )
     parser.add_argument(
         "--do",
         nargs=4,
-        metavar=(
-            "S3BUCKET",
-            "AWS_ACCESS_KEY",
-            "AWS_SECRET_KEY",
-            "ENDPOINT_URL"),
+        metavar=("S3BUCKET", "AWS_ACCESS_KEY", "AWS_SECRET_KEY", "ENDPOINT_URL"),
         help="DigitalOcean Spaces S3BUCKET Bucket Name\n"
         "DigitalOcean Spaces ACCESS_KEY\nDigitalOcean Spaces SECRET_KEY\n"
-        "DigitalOcean Spaces Bucket ENDPOINT_URL")
+        "DigitalOcean Spaces Bucket ENDPOINT_URL",
+    )
     parser.add_argument(
         "--minio",
         nargs=4,
-        metavar=(
-            "S3BUCKET",
-            "AWS_ACCESS_KEY",
-            "AWS_SECRET_KEY",
-            "ENDPOINT_URL"),
+        metavar=("S3BUCKET", "AWS_ACCESS_KEY", "AWS_SECRET_KEY", "ENDPOINT_URL"),
         help="MinIO Inc. S3BUCKET Bucket Name\nMinIO Inc. ACCESS_KEY\n"
-        "MinIO Inc. SECRET_KEY\nMinIO Inc. Server ENDPOINT_URL")
+        "MinIO Inc. SECRET_KEY\nMinIO Inc. Server ENDPOINT_URL",
+    )
     parser.add_argument(
         "--insecure",
         default=True,
         action="store_false",
-        help="Disables SSL/TLS verification")
+        help="Disables SSL/TLS verification",
+    )
     parser.add_argument(
-        "--version",
-        action="version",
-        version=__app__+" v"+__version__)
+        "--api", default="2.1", help="Cisco DNA Center Platform Version"
+    )
+    parser.add_argument(
+        "--version", action="version", version=__app__ + " v" + __version__
+    )
     args = parser.parse_args()
 
     """ Logging events with timestamp """
     logging.basicConfig(
-            format="%(asctime)s %(levelname)-8s %(message)s",
-            level=logging.INFO,
-            datefmt="%Y-%m-%d %H:%M:%S"
-            )
+        format="%(asctime)s %(levelname)-8s %(message)s",
+        level=logging.INFO,
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
     logging.info("Starting Application")
 
     """ Store settings in class """
@@ -111,7 +103,12 @@ if __name__ == "__main__":
 
     """ Execute first collection of configs """
     try:
-        dnac.ciscoDnacCollectCfgs(dnacApi)
+        if args.api == "2.1":
+            """ Supported version """
+            dnac.collect_cfg(dnacApi)
+        else:
+            """ Unsupported version """
+            dnac.ciscoDnacCollectCfgs(dnacApi)
     except KeyboardInterrupt:
         print("")
         logging.error("Keyboard Interrupt - Closing application")
